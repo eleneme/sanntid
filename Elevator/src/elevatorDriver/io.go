@@ -1,5 +1,6 @@
 
- io.h, channels.go, channels.h and driver.go
+package elevatorDriver
+
 /*
 #cgo CFLAGS: -std=c11
 #cgo LDFLAGS: -lcomedi -lm
@@ -7,50 +8,43 @@
 */
 import "C"
 
-type elev_button_type_t int
+type ElevButtonType int
 
 const (
-	BUTTON_CALL_UP elev_button_type_t = iota
-	BUTTON_CALL_DOWN
-	BUTTON_COMMAND
+	BUTTON_CALL_UP ElevButtonType = 0
+	BUTTON_CALL_DOWN = 1
+	BUTTON_COMMAND = 2
 )
 
-func ioInit() int {
-	return int(C.elev_init())
+type ElevMotorDirection int
+
+const (
+	DIR_DOWN ElevMotorDirection = -1
+	DIR_UP = 1
+	DIR_STOP = 0
+)
+
+
+func ioInit() bool {
+	return int(C.io_init()) != 0
 }
 
-func ioSpeed(speed int) {
-	C.elev_set_speed(C.int(speed))
+func ioSetBit(channel int) {
+	C.io_set_bit(C.int(channel))
 }
 
-func ioGetFloorSensor() int {
-	return int(C.elev_get_floor_sensor_signal())
+func ioClearBit(channel int) {
+	C.io_clear_bit(C.int(channel))
 }
 
-func ioGetButtonSignal(button elev_button_type_t, floor int) int {
-	return int(C.elev_get_button_signal(C.elev_button_type_t(button), C.int(floor)))
+func ioWriteAnalog(channel int, value int) {
+	C.io_write_analog(C.int(channel), C.int(value))
 }
 
-func ioGetStopSignal() int {
-	return int(C.elev_get_stop_signal())
+func ioReadBit(channel int) bool {
+	return int(C.io_read_bit(C.int(channel))) != 0
 }
 
-func ioGetObstruction() int {
-	return int(C.elev_get_obstruction_signal())
-}
-
-func ioSetFloorIndicator(floor int) {
-	C.elev_set_floor_indicator(C.int(floor))
-}
-
-func ioSetButtonLamp(button elev_button_type_t, floor int, value int) {
-	C.elev_set_button_lamp(C.elev_button_type_t(button), C.int(floor), C.int(value))
-}
-
-func ioSetStopLamp(value int) {
-	C.elev_set_stop_lamp(C.int(value))
-}
-
-func ioElevSetDoorOpenLamp(value int) {
-	C.elev_set_door_open_lamp(C.int(value))
+func ioReadAnalog(channel int) int {
+	return int(C.io_read_analog(C.int(channel)))
 }
