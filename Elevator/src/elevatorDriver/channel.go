@@ -1,19 +1,4 @@
-package variables
-
-type Order struct{
-	Floor int		
-	Dir int			
-
-}
-
-type Status struct{
-	Addr string			//Local IP
-	Floor int 			//Current floor
-	Direction int		//Up = 1, Still = 0, Down = -1
-	Stop bool			
-	Orders []Order		//Destination floors
-	
-}
+package elevatorDriver
 
 
 const N_FLOORS  	= 	3 

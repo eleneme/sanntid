@@ -1,4 +1,5 @@
-package driver  // where "driver" is the folder that contains io.go, io.c, io.h, channels.go, channels.h and driver.go
+
+ io.h, channels.go, channels.h and driver.go
 /*
 #cgo CFLAGS: -std=c11
 #cgo LDFLAGS: -lcomedi -lm
@@ -14,42 +15,42 @@ const (
 	BUTTON_COMMAND
 )
 
-func Init() int {
+func ioInit() int {
 	return int(C.elev_init())
 }
 
-func Speed(speed int) {
+func ioSpeed(speed int) {
 	C.elev_set_speed(C.int(speed))
 }
 
-func GetFloorSensor() int {
+func ioGetFloorSensor() int {
 	return int(C.elev_get_floor_sensor_signal())
 }
 
-func GetButtonSignal(button elev_button_type_t, floor int) int {
+func ioGetButtonSignal(button elev_button_type_t, floor int) int {
 	return int(C.elev_get_button_signal(C.elev_button_type_t(button), C.int(floor)))
 }
 
-func GetStopSignal() int {
+func ioGetStopSignal() int {
 	return int(C.elev_get_stop_signal())
 }
 
-func GetObstruction() int {
+func ioGetObstruction() int {
 	return int(C.elev_get_obstruction_signal())
 }
 
-func SetFloorIndicator(floor int) {
+func ioSetFloorIndicator(floor int) {
 	C.elev_set_floor_indicator(C.int(floor))
 }
 
-func SetButtonLamp(button elev_button_type_t, floor int, value int) {
+func ioSetButtonLamp(button elev_button_type_t, floor int, value int) {
 	C.elev_set_button_lamp(C.elev_button_type_t(button), C.int(floor), C.int(value))
 }
 
-func SetStopLamp(value int) {
+func ioSetStopLamp(value int) {
 	C.elev_set_stop_lamp(C.int(value))
 }
 
-func ElevSetDoorOpenLamp(value int) {
+func ioElevSetDoorOpenLamp(value int) {
 	C.elev_set_door_open_lamp(C.int(value))
 }
