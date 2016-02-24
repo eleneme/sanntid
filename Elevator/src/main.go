@@ -1,13 +1,33 @@
 package main
 
-import(
+import (
 	"./elevatorDriver"
-	
 )
 
-func main(){
+func main() {
 	elevatorDriver.ElevInit()
+	elevatorDriver.ElevDrive(1)
+	for {
 
-	elevatorDriver.ElevSetButtonLamp(1, 1, 1)
-	elevatorDriver.ElevSetMotorDir(-1)
+		elevSetPosition()
+		elevStopOutOfBounce()
+
+	}
+
+}
+
+func elevSetPosition() {
+	floor := elevatorDriver.ElevGetFloorSensorSignal()
+	elevatorDriver.ElevSetFloorIndicator(floor)
+
+}
+
+func elevStopOutOfBounce() {
+
+	floor := elevatorDriver.ElevGetFloorSensorSignal()
+	if floor == 3 {
+		elevatorDriver.ElevDrive(0)
+	} else if floor == 0 {
+		elevatorDriver.ElevDrive(0)
+	}
 }
