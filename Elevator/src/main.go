@@ -2,11 +2,13 @@ package main
 
 import (
 	"./elevatorDriver"
+	"fmt"
 )
 
 func main() {
 	elevatorDriver.ElevInit()
 	elevatorDriver.ElevDrive(1)
+	fmt.Println("Elevator initialized")
 	for {
 
 		elevSetPosition()
@@ -19,7 +21,7 @@ func main() {
 func elevSetPosition() {
 	floor := elevatorDriver.ElevGetFloorSensorSignal()
 	elevatorDriver.ElevSetFloorIndicator(floor)
-
+	
 }
 
 func elevStopOutOfBounce() {
