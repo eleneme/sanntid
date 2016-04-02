@@ -116,3 +116,11 @@ func ElevGetFloorSensorSignal() int {
 		return -1
 	}
 }
+
+func ElevSetDoorOpenLamp(value int) {
+	if value != 0 {
+		ioSetBit(LIGHT_DOOR_OPEN)
+	} else {
+		ioClearBit(LIGHT_DOOR_OPEN)
+	}
+}

@@ -11,16 +11,17 @@ import (
 
 var chButtonPressed = make(chan elevatorDriver.ButtonStatus)
 var chGetFloor = make(chan int)
-	
+
+var chEvents = make(chan fsmDriver.States)
 
 func main() {
 	queueDriver.QueueInit()
 	elevatorDriver.ElevInit()
 
 	go userInterfaceDriver.NewOrder(chButtonPressed)
-	go fsmDriver.ChannelHandler(chButtonPressed, chGetFloor)
+	go fsmDriver.ChannelHandler(chButtonPressed, chGetFloor, chEvents)
 	go userInterfaceDriver.FloorTracker(chGetFloor)
-	go fsmDriver.Fsm(chGetFloor)
+	//go fsmDriver.Fsm(chGetFloor)
 	
 	for{
 		

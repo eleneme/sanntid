@@ -25,3 +25,7 @@ type ButtonStatus struct{  //shit navn?
 	Floor int
 }
 
+type ElevStatus struct {
+	Dir ElevMotorDirection
+	LastFloor int
+}
