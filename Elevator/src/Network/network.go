@@ -17,7 +17,9 @@ const (
 )
 
 func networkInit() {
-	chUDPTransmit := make(chan []byte])
+	chTCPTransmit := make(chan config.NetworkMessage)
+	chTCPRecieve := make(chan config.NetworkMessage, 1024)
+	chUDPTransmit := make(chan config.NetworkMessage)
 	chUDPRecieve := make(chan config.NetworkMessage, 1024)
 
 }

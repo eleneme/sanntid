@@ -7,17 +7,17 @@ import (
 const MOTOR_SPEED = 2800
 
 var lampMatrix = [N_FLOORS][N_BUTTONS]int{
-	[3]int{LIGHT_UP1, LIGHT_DOWN1, LIGHT_COMMAND1},
-	[3]int{LIGHT_UP2, LIGHT_DOWN2, LIGHT_COMMAND2},
-	[3]int{LIGHT_UP3, LIGHT_DOWN3, LIGHT_COMMAND3},
-	[3]int{LIGHT_UP4, LIGHT_DOWN4, LIGHT_COMMAND4},
+	[4]int{LIGHT_UP1, LIGHT_DOWN1, LIGHT_COMMAND1},
+	[4]int{LIGHT_UP2, LIGHT_DOWN2, LIGHT_COMMAND2},
+	[4]int{LIGHT_UP3, LIGHT_DOWN3, LIGHT_COMMAND3},
+	[4]int{LIGHT_UP4, LIGHT_DOWN4, LIGHT_COMMAND4},
 }
 
 var buttonMatrix = [N_FLOORS][N_BUTTONS]int{
-	[3]int{BUTTON_UP1, BUTTON_DOWN1, BUTTON_COMMAND1},
-	[3]int{BUTTON_UP2, BUTTON_DOWN2, BUTTON_COMMAND2},
-	[3]int{BUTTON_UP3, BUTTON_DOWN3, BUTTON_COMMAND3},
-	[3]int{BUTTON_UP4, BUTTON_DOWN4, BUTTON_COMMAND4},
+	[4]int{BUTTON_UP1, BUTTON_DOWN1, BUTTON_COMMAND1},
+	[4]int{BUTTON_UP2, BUTTON_DOWN2, BUTTON_COMMAND2},
+	[4]int{BUTTON_UP3, BUTTON_DOWN3, BUTTON_COMMAND3},
+	[4]int{BUTTON_UP4, BUTTON_DOWN4, BUTTON_COMMAND4},
 }
 
 func ElevInit() {
@@ -27,17 +27,10 @@ func ElevInit() {
 	}
 
 	for floor := 0; floor < N_FLOORS; floor++ {
-			for button := BUTTON_CALL_UP; button < N_BUTTONS; button++{
-				ElevSetButtonLamp(floor, button, 0) //no orders before initialization
-			}
-			
+		for button := 0; button < N_BUTTONS; button++ {
+		}
 	}
-	//var currentFloor int
-	/*currentFloor := <- chGetFloor
-	for currentFloor != -1 && currentFloor > 0{
-		ElevDrive(-1)
-	}
-	chEvents <- fsmDriver.States.atFloor*/
+
 }
 
 func ElevDrive(dir ElevMotorDirection) {
