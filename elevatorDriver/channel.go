@@ -1,8 +1,6 @@
 package elevatorDriver
 
 
-const N_FLOORS  	= 	4 
-const N_BUTTONS		= 	4      
 
 	
 const PORT4            	=   3

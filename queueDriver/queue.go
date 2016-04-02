@@ -1,39 +1,37 @@
-package queue
+package queueDriver
 
-import()
+import (
+	"../elevatorDriver"
+	//"fmt"
+)
 
-var buttonChan = make(chan int)
+var Queue = [elevatorDriver.N_FLOORS][elevatorDriver.N_BUTTONS]int{}
 
-func queueInit(){
-	var queue = [N_FLOORS][N_BUTTONS]{
-		[4]{-1, 0, 0}
-		[4]{0, 0, 0}
-		[4]{0, 0, 0}
-		[4]{-1, 0, 0}
-
-	}
+func QueueInit(){
+	Queue = [elevatorDriver.N_FLOORS][elevatorDriver.N_BUTTONS]int{{0, -1, 0}, {0, 0, 0}, {0, 0, 0}, {-1, 0, 0}}
 }
 
-func addOrder(chButtont <- chan ){
-
+func AddOrder(order elevatorDriver.ButtonStatus){
+	Queue[order.Floor][order.ButtonType] = 1
+	elevatorDriver.ElevSetButtonLamp(order.Floor, order.ButtonType, 1)
 }
 
-func deleteOrder(){
-
-}
-
-func stopAtFloor(){
+/*func DeleteOrder(){
 
 }
 
-func emptyQueue(){
+func StopAtFloor(){
 
 }
 
-func orderAbove(){
+func EmptyQueue(){
 
 }
 
-func orderBelow(){
+func OrderAbove(){
+
+}
+
+func OrderBelow(){
 	
-}
+}*/
