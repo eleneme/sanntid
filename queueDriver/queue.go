@@ -8,10 +8,14 @@ import (
 var Queue = [elevatorDriver.N_FLOORS][elevatorDriver.N_BUTTONS]int{}
 
 func QueueInit(){
-	Queue = [elevatorDriver.N_FLOORS][elevatorDriver.N_BUTTONS]int{{0, -1, 0}, {0, 0, 0}, {0, 0, 0}, {-1, 0, 0}}
+	Queue = [elevatorDriver.N_FLOORS][elevatorDriver.N_BUTTONS]int{
+		{0, -1, 0}, 
+		{0, 0, 0}, 
+		{0, 0, 0}, 
+		{-1, 0, 0}}
 }
 
-func AddOrder(order elevatorDriver.ButtonStatus){
+func AddOrder(order elevatorDriver.Button){
 	Queue[order.Floor][order.ButtonType] = 1
 	elevatorDriver.ElevSetButtonLamp(order.Floor, order.ButtonType, 1)
 }
@@ -56,9 +60,4 @@ func DeleteOrder(floor int){
 			}
 		}
 }
-
-/*func StopAtFloor(){
-
-}*/
-
 

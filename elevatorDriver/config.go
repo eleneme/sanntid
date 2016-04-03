@@ -1,7 +1,7 @@
 package elevatorDriver
 
 
-
+var eInfo ElevInfo
 
 const N_FLOORS  	= 	4 
 const N_BUTTONS		= 	3   
@@ -20,7 +20,7 @@ const (
 	DIR_STOP = 0
 )
 
-type ButtonStatus struct{  //shit navn?
+type Button struct{  
 	ButtonType ElevButtonType
 	Floor int
 }
@@ -29,3 +29,10 @@ type ElevStatus struct {
 	Dir ElevMotorDirection
 	LastFloor int
 }
+
+type ElevInfo struct{
+	Dir int
+	CurrentFloor int
+}
+
+
