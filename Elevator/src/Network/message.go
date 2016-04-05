@@ -1,14 +1,15 @@
-package network
+package Network
 
 import(
 	"strings"
 	"net"
 	"time"
+	"fmt"
 )
 type Message struct{
 	From string
 	To string
-	Msg string
+	Message string
 	MsgType MessageType
 }
 
@@ -30,7 +31,7 @@ const(
 type sentMessage struct{
 	To *net.UDPConn
 	message *Message
-	timeSent time.time
+	timeSent time.Time
 }
 
 var sentMessages []*sentMessage
@@ -41,22 +42,24 @@ func SendMessage(text string, conn *net.UDPConn, ack bool){
 	msg.Message = text
 	messageString := msg.From + "+" + msg.Message
 
-	if (ack){
-		m.To = MasterConn.IP
-		addMessage(m, conn)
+	if ack{
+		msg.To = MasterConn.IP
+		addMessage(msg, conn)
 	}
 
 	send(messageString, conn)
 
 }
-//Funker dette?
+
+/*//Funker dette?
 func SendMessageType(m *Message, conn *net.UDPConn, ack bool){
 	msg := new(Message)
 	msg.From = IP 
-	msg.MessageType = m.MessageType
-	messageString := msg.From + "+" + msg.MessageType
+	msg.MsgType = m.MsgType
+	msg.Message = ""
+	messageString := msg.From + "+" + msg.Message
 
-	if (ack){
+	if ack{
 		m.To = MasterConn.IP
 		addMessage(m, conn)
 	}
@@ -64,10 +67,10 @@ func SendMessageType(m *Message, conn *net.UDPConn, ack bool){
 	send(messageString, conn)
 
 }
-
+*/
 func recieveMessage(m string){
 	msg := new(Message)
-	text := string.Split(m, "+")
+	text := strings.Split(m, "+")
 	msg.From = text[0]
 	msg.Message = text[1]
 
@@ -78,14 +81,14 @@ func recieveMessage(m string){
 
 func printMessage(msg *Message){
 	fmt.Println("")
-	fmt.Prinln("From: ", msg.From)
+	fmt.Println("From: ", msg.From)
 	fmt.Println("Message: ", msg.Message)
 	fmt.Println("")
 }
 
 func addMessage(message *Message, conn *net.UDPConn){
 	var temp sentMessage
-	temp.messageSent = message
+	temp.message = message
 	temp.timeSent = time.Now()
 	temp.To = conn
 	sentMessages = append(sentMessages, &temp) 
@@ -93,21 +96,21 @@ func addMessage(message *Message, conn *net.UDPConn){
 
 func messageAcknowledge(message *Message){
 	for msg := 0; msg < len(sentMessages); msg++{
-		if sentMessages[i].messageSent.Message == message.Message[2:6]{
+		if sentMessages[msg].message.Message == message.Message[2:6]{
 			removeMessage(msg)
 		}
 	}
 }
 
 func removeMessage(msg int){
-	sentMessage = append(sentMessages[:msg], sentMessages[msg+1]...)
+	sentMessages = append(sentMessages[:msg], sentMessages[msg+1:]...)
 }
 
 func updateMessage(){
 	for; true;{
 		for i := 0; i < len(sentMessages); i++{
 			if (time.Since(sentMessages[i].timeSent) > 2000*time.Millisecond){
-				SendMessage(SendMessages[i].messageSent.Message, sentMessages[i].To, true)
+				SendMessage(sentMessages[i].message.Message, sentMessages[i].To, true)
 				removeMessage(i)
 			}
 		}

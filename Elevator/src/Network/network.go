@@ -16,6 +16,7 @@ type Connection struct{
 }
 
 
+var chNewMessage = make(chan *Message, 200)
 
 
 var IP string
@@ -26,7 +27,7 @@ var Broadcast Connection
 var Master = false
 var Alive bool
 
-func networkInit() {
+func NetworkInit() {
 	//Retrive local IP address
 	adr, _ := net.InterfaceAddrs()
 	ip := strings.Split(adr[1].String(), "/")
@@ -47,7 +48,7 @@ func networkInit() {
 
 	go timeout()
 
-	for ; (time.Since(temp) < 350*time.Milliesecond) && (Master == false){
+	for ; (time.Since(temp) < 350*time.Millisecond) && (Master == false);{
 
 	}
 
@@ -65,14 +66,14 @@ func alive(conn *net.UDPConn){
 	//sends alive message
 	for; Alive; {
 		if  Master{
-			msg := new(Message)
-			msg.MessageType = MasterAlive
-			SendMessageType(msg, conn, false) 
-			time.Sleep(100*time.Milliesecond)
+			//msg := new(Message)
+			//msg.MsgType = MasterAlive
+			SendMessage("MasterAlive", conn, false) 
+			time.Sleep(100*time.Millisecond)
 		}else{
-			msg := new(Message)
-			msg.MessageType = SlaveAlive
-			SendMessageType(msg, conn, false) 
+			//msg := new(Message)
+			//msg.MsgType = SlaveAlive
+			SendMessage("SlaveAlive", conn, false) 
 		}
 	}
 }
@@ -114,7 +115,7 @@ func handleMessage(msg *Message){
 
 	case 2: //MessageAck
 		//Previous message acknowledged
-		messageAcknowledged(msg)
+		messageAcknowledge(msg)
 
 	default:
 		chNewMessage <- msg //sends msg to channelHandler NewMessage
@@ -126,7 +127,7 @@ func handleMessage(msg *Message){
 func timeout(){
 	for; true; {
 
-		if (time.Since(MasterConn.LastSignal) > 900*time.Milliesecond) && (Master == false){
+		if (time.Since(MasterConn.LastSignal) > 900*time.Millisecond) && (Master == false){
 			//No master on network
 			go FindNewMaster() //whosmaster
 
@@ -136,11 +137,11 @@ func timeout(){
 				removeMessage(i)
 			}
 
-			time.Sleep(500.Milliesecond)
+			time.Sleep(500*time.Millisecond)
 		}
 
 		for i := 0; i < len(Connected); i++{
-			if time.Since(Connected[i].LastSignal) > 1200*time.Milliesecond{
+			if time.Since(Connected[i].LastSignal) > 1200*time.Millisecond{
 				//slave timed out
 
 				fmt.Println("Slave timed out: ", Connected[i].IP)
@@ -156,13 +157,13 @@ func timeout(){
 
 					var temp Message
 					temp.From = IP
-					temp.MessageType = NewMaster
+					temp.MsgType = NewMaster
 					chNewMessage <- &temp //NewMessage
 				}
 			}
 		}
 
-		time.Sleep(50*time.Milliesecond)
+		time.Sleep(50*time.Millisecond)
 	}
 
 	fmt.Println("Timeout done")
@@ -190,7 +191,7 @@ func FindConn(ip string) (*net.UDPConn){
 	return nil
 }
 
-func FindNewMaster{
+func FindNewMaster(){
 	//finds new master with the lowest ip
 	fmt.Println("Master timeout: finding new master")
 	me := true
@@ -198,7 +199,7 @@ func FindNewMaster{
 	own, _ := strconv.Atoi(string(IP[number-2:number]))
 
 	for i := 0; i < len(Connected); i++{
-		fmt.Println("Connected[",i,"]: ", Connected[i].OP)
+		fmt.Println("Connected[",i,"]: ", Connected[i].IP)
 	}
 
 	//compares own ip to lowest ip
@@ -216,7 +217,7 @@ func FindNewMaster{
 		//Distribute backup
 		var temp Message
 		temp.From = IP
-		temp.MessageType = NewMaster
+		temp.MsgType = NewMaster
 		chNewMessage <- &temp //NewMessage
 	}
 

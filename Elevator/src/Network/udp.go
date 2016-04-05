@@ -1,7 +1,8 @@
-package network
+package Network
 
 import(
 	"net"
+	"fmt"
 )
 
 func connect(ip string) (connection *net.UDPConn){
@@ -37,7 +38,7 @@ func recieve(conn *net.UDPConn){
 	recieved := make([]byte, 500)
 	for; true; {
 		_, _, _ = conn.ReadFromUDP(recieved)
-		go recieveMessage(recieved string)
+		go recieveMessage(string(recieved))
 	}
 	conn.Close()
 }

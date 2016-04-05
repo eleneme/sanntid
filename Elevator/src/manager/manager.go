@@ -4,6 +4,7 @@ import (
 	
 	"../elevatorDriver"
 	"../queueDriver"
+	//"../Network"
 	"fmt"
 	"sync"
 	"time"
@@ -46,7 +47,6 @@ func ChannelHandler(chButtonPressed chan elevatorDriver.Button, chGetFloor chan 
 			setCurrentFloor(floor)
 			PassingFloor(floor)
 			break
-		
 		}
 	}
 }

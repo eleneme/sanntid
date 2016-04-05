@@ -22,7 +22,7 @@ func main() {
 	go userInterfaceDriver.NewOrder(chButtonPressed)
 	go userInterfaceDriver.FloorTracker(chGetFloor)
 	go manager.ChannelHandler(chButtonPressed, chGetFloor)
-	Network.networkInit()
+	Network.NetworkInit()
 	
 	for{}
 }
