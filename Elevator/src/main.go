@@ -8,6 +8,7 @@ import (
 	//"fmt"
 	//"time"
 	"./Network"
+	"./phoenix"
 )
 
 var chButtonPressed = make(chan elevatorDriver.Button)
@@ -15,6 +16,8 @@ var chGetFloor = make(chan int)
 
 
 func main() {
+
+	phoenix.Phoenix()
 	queueDriver.QueueInit()
 	elevatorDriver.ElevInit()
 
@@ -24,5 +27,7 @@ func main() {
 	go manager.ChannelHandler(chButtonPressed, chGetFloor)
 	Network.NetworkInit()
 	
+	
+
 	for{}
 }

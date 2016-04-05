@@ -79,7 +79,7 @@ func recieveMessage(m string){
 	}
 }
 
-func printMessage(msg *Message){
+func PrintMessage(msg *Message){
 	fmt.Println("")
 	fmt.Println("From: ", msg.From)
 	fmt.Println("Message: ", msg.Message)
