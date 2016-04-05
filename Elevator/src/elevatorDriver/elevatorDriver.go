@@ -2,6 +2,7 @@ package elevatorDriver
 
 import (
 	"errors"
+	"fmt"
 )
 
 const MOTOR_SPEED = 2800
@@ -25,19 +26,23 @@ func ElevInit() {
 		errors.New("Elevator not initialized")
 		return
 	}
-
+	fmt.Println("Initialized")
 	for floor := 0; floor < N_FLOORS; floor++ {
 			for button := BUTTON_CALL_UP; button < N_BUTTONS; button++{
 				ElevSetButtonLamp(floor, button, 0) //no orders before initialization
+				ElevSetDoorOpenLamp(0)
 			}
+	}
 			
-	}
-	//var currentFloor int
-	/*currentFloor := <- chGetFloor
-	for currentFloor != -1 && currentFloor > 0{
+	floor := ElevGetFloorSensorSignal()
+	if floor == -1 {
 		ElevDrive(-1)
+		
+	}else{
+		ElevDrive(0)
 	}
-	chEvents <- fsmDriver.States.atFloor*/
+	
+	
 }
 
 func ElevDrive(dir ElevMotorDirection) {
@@ -109,5 +114,13 @@ func ElevGetFloorSensorSignal() int {
 		return 3
 	} else {
 		return -1
+	}
+}
+
+func ElevSetDoorOpenLamp(value int) {
+	if value != 0 {
+		ioSetBit(LIGHT_DOOR_OPEN)
+	} else {
+		ioClearBit(LIGHT_DOOR_OPEN)
 	}
 }

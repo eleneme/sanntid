@@ -3,46 +3,26 @@ package main
 import (
 	"./elevatorDriver"
 	"./userInterfaceDriver"
-	//"./queueDriver"
-	"./fsmDriver"
+	"./queueDriver"
+	"./manager"
 	//"fmt"
+	//"time"
+	"./Network"
 )
 
+var chButtonPressed = make(chan elevatorDriver.Button)
+var chGetFloor = make(chan int)
 
-	
 
 func main() {
-	chButtonPressed := make(chan elevatorDriver.ButtonStatus)
-	chGetFloor := make(chan int)
-	chEvents := make(chan fsmDriver.States)
+	queueDriver.QueueInit()
+	elevatorDriver.ElevInit()
 
-	for{
-		go fsmDriver.ChannelHandler(chButtonPressed)
-		go userInterfaceDriver.NewOrder(chButtonPressed)
-		go userInterfaceDriver.FloorTracker(chGetFloor)
-		go fsmDriver.Fsm(chEvents, chGetFloor)
-
-		/*for floor := 0; floor < elevatorDriver.N_FLOORS; floor++ {
-			for button := 0; button < elevatorDriver.N_BUTTONS; button++{
-				fmt.Print(queueDriver.Queue[floor][button])
-			}
-			fmt.Println()
-		}*/
 	
-	}
+	go userInterfaceDriver.NewOrder(chButtonPressed)
+	go userInterfaceDriver.FloorTracker(chGetFloor)
+	go manager.ChannelHandler(chButtonPressed, chGetFloor)
+	Network.networkInit()
+	
+	for{}
 }
-/*
-
-
-func elevStopOutOfBounce() {
-
-	floor := elevatorDriver.ElevGetFloorSensorSignal()
-	if floor == 3 {
-		elevatorDriver.ElevDrive(0)
-		elevatorDriver.ElevDrive(-1)
-	} else if floor == 0 {
-		elevatorDriver.ElevDrive(0)
-		elevatorDriver.ElevDrive(1)
-	}
-}
-*/
